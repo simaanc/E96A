@@ -87,18 +87,16 @@ public class PlayerInput : MonoBehaviour
 
     private void CheckIfGrounded(Collision2D collision)
     {
-        bool wasGrounded = isGrounded;
-        isGrounded = false;
-        foreach (ContactPoint2D point in collision.contacts)
+        isGrounded = false; // Assume not grounded until proven otherwise
+
+        for (int i = 0; i < collision.contactCount; i++)
         {
-            if (point.normal.y >= 0.5f)
+            Vector2 normal = collision.GetContact(i).normal;
+            if (normal.y > 0.2f) // Adjust the 0.5f value as needed
             {
                 isGrounded = true;
-                if (!wasGrounded) // If we were not grounded before this, and now we are
-                {
-                    jumpCount = 0; // Reset the jump count when grounded
-                }
-                break;
+                jumpCount = 0; // Reset the jump count when grounded
+                break; // Exit the loop if grounded
             }
         }
     }
